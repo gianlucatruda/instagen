@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # Image Generator for Instagram
-# Version 1.5
+# Version 1.6
 
-version = "1.5"
+version = "1.6"
 
 import scipy.misc
 import numpy as np
@@ -28,9 +28,12 @@ def get_norm(x, y):
 def get_values(x,y):
 	bar = get_norm(x, y)
 	a = get_norm(0, 256-foo)
-	b = get_norm(foo, bar)
-	c = get_norm(bar, 256)
+	b = get_norm(patternate(bar), bar)
+	c = get_norm(bar, foo)
 	return [a, b, c]
+
+def patternate(x):
+	return rand.randint(min(foo, x), max(foo,x))
 
 def generate(width, height, type):
 	# Create an empty image
@@ -39,11 +42,15 @@ def generate(width, height, type):
 
 
 	# Loop through every point in image
+	current_cluster = get_values(0,0)
 	for x in range(width):
 		for y in range(height):
 			if(x%20==0):
 				print('\r'+str(round(100*x/width))+'%',end='...')
-			img[y][x] = get_values(x,y)
+			if(y>0 and x%y==7):
+				current_cluster = get_values(patternate(x),y)
+			img[y][x] = current_cluster
+
 
 	# Save the image
 	stamp = "{:%Y-%m-%d_%H-%M-%S}".format(dt.datetime.now())
