@@ -1,45 +1,38 @@
 #!/usr/bin/env python
 # Image Generator for Instagram
-# Version 1.1
+# Version 1.3
 
-version = "1.1"
+version = "1.3"
 
 import scipy.misc
 import numpy as np
 import random as rand
 import datetime as dt
+import math
 
 # Image size as per Instagram 2017
 width = 1080
 height = 1080
 channels = 3
 
+def getPoint(min, max):
+	miu = int((max-min)/2)
+	dev = int((max-min)/20)
+	return int(np.random.normal(miu, dev, 5)[0])
+
 # Create an empty image
 img = np.zeros((height, width, channels), dtype=np.uint8)
 
-"""
-# Draw something (http://stackoverflow.com/a/10032271/562769)
-xx, yy = np.mgrid[:height, :width]
-circle = (xx - 100) ** 2 + (yy - 100) ** 2
 
-# Set the RGB values
-for y in range(img.shape[0]):
-    for x in range(img.shape[1]):
-        r, g, b = circle[y][x], circle[y][x], circle[y][x]
-        img[y][x][0] = r
-        img[y][x][1] = g
-        img[y][x][2] = b
-"""
-
-def getPoint():
-	return np.random.normal(128, 50, 1)[0]
-
-for y in range(img.shape[0]):
-	for x in range(img.shape[1]):
-		img[y][x][0] = rand.randint(100, 150)
-		img[y][x][1] = rand.randint(100, 150)
-		img[y][x][2] = rand.randint(100, 150)
+for i in range(width*height):
+	if(i%width==0):
+		print('\r'+str(round(100*i/(width*height)))+'%',end='...')
+	a = int(math.sqrt(i))
+	b = getPoint(100, 200)
+	c = int((b/(a+1))*256)
+	img[getPoint(0, height)][a] = [100, b, c]
 
 # Save the image
 stamp = "{:%Y-%m-%d_%H-%M-%S}".format(dt.datetime.now())
-scipy.misc.imsave("gen_v"+version+"_"+stamp+".png", img)
+scipy.misc.imsave("output/gen_v"+version+"_"+stamp+".png", img)
+print("Image saved")
