@@ -1,3 +1,7 @@
+# output and samples folders with huge images
+samples/*
+output/*
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
