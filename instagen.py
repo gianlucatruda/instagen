@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # Image Generator for Instagram
-# Version 1.4
+# Version 1.5
 
-version = "1.4"
+version = "1.5"
 
 import scipy.misc
 import numpy as np
@@ -15,6 +15,9 @@ import sys
 full_scale = 1080
 preview_scale = 300
 
+# Generate session constants
+foo = int(rand.randint(1,80)*math.pi)
+
 def get_norm(x, y):
 	start = min(x,y)
 	end = max(x,y)
@@ -23,9 +26,10 @@ def get_norm(x, y):
 	return int(np.random.normal(miu, dev, 1)[0])
 
 def get_values(x,y):
-	a = get_norm(0, 200)
-	b = get_norm(200, 255)
-	c = int((a/(b+1))*256)
+	bar = get_norm(x, y)
+	a = get_norm(0, 256-foo)
+	b = get_norm(foo, bar)
+	c = get_norm(bar, 256)
 	return [a, b, c]
 
 def generate(width, height, type):
@@ -33,9 +37,11 @@ def generate(width, height, type):
 	channels = 3
 	img = np.zeros((height, width, channels), dtype=np.uint8)
 
+
+	# Loop through every point in image
 	for x in range(width):
 		for y in range(height):
-			if(x%100==0):
+			if(x%20==0):
 				print('\r'+str(round(100*x/width))+'%',end='...')
 			img[y][x] = get_values(x,y)
 
