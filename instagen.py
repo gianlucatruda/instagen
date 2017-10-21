@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # Image Generator for Instagram
-version = "2.0"
+version = "2.1"
 
 import math, sys, scipy.misc
 import random as rand
@@ -14,7 +14,7 @@ preview_scale = 300
 
 # Session constants
 foo = int(rand.randint(1, 80) * math.pi)
-chunk = [3, 7, 9, 11][rand.randint(0, 3)]
+chunk = rand.randint(1, foo)
 pallet = get_pallet(foo)
 
 
@@ -29,7 +29,7 @@ def generate(width, height, kind):
         for y in range(height):
             if x % 20 == 0:
                 print('\r' + str(round(100 * x / width)) + '%', end='...')
-            if y > 0 and width % y == chunk:
+            if y > 0 and x > 0 and (x % chunk == 0 or y % chunk == 0):
                 current_cluster = get_pixel(x, y, pallet)
             img[y][x] = current_cluster
 
